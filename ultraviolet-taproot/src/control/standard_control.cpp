@@ -9,8 +9,10 @@
 #include "tap/control/press_command_mapping.hpp"
 #include "tap/control/setpoint/commands/calibrate_command.hpp"
 #include "tap/control/toggle_command_mapping.hpp"
-//include subsystems and commands below
-
+//include subsystems below
+#include "subsystems/drivetrain/drivetrain.hpp"
+//include commands below
+#include "subsystems/drivetrain/drivetrain_drive_command.hpp"
 
 /*
  * NOTE: We are using the DoNotUse_getDrivers() function here
@@ -23,30 +25,37 @@ src::driversFunc drivers = src::DoNotUse_getDrivers;
 using namespace tap;
 using namespace tap::control;
 
+//include subsystem namespaces below
+using namespace src::Drivetrain;
+
 namespace StandardControl {
 
 // Define Subsystems Here
-
+DrivetrainSubsystem drivetrain(drivers());
 // Define Commands Here
+OmniDriveCommand omni(drivers(), &drivetrain);
 
 // Define Command Mappings Here
-
+HoldCommandMapping leftSwitchUp(
+    drivers(), 
+    {&omni}, 
+    RemoteMapState(Remote::Switch::LEFT_SWITCH, Remote::SwitchState::UP));
 // Register Subsystems with drivers->commandScheduler.registerSubsystem(&subsystem_name);
 void registerSubsystems(src::Drivers* drivers)
 {
-
+    drivers->commandScheduler.registerSubsystem(&drivetrain);
 }
 
 // Initialize Subsystems with subsystem.initialize();
 void initializeSubsystems()
 {
-
+    drivetrain.initialize();
 }
 
 // Set Default Command with subsystem.setDefaultCommand(&command)
 void setDefaultCommands(src::Drivers* drivers)
 {
-
+    drivetrain.setDefaultCommand(&omni);
 }
 
 // Set Commands scheduled on startup
@@ -58,7 +67,7 @@ void startupCommands(src::Drivers* drivers)
 // Register IO Mappings with drivers->commandMapper.addMap(&commandMapping)
 void registerIOMappings(src::Drivers* drivers)
 {
-    
+    drivers->commandMapper.addMap(&leftSwitchUp);
 }
 
 } //namespace StandardControl

@@ -9,8 +9,9 @@
 #include "tap/control/press_command_mapping.hpp"
 #include "tap/control/setpoint/commands/calibrate_command.hpp"
 #include "tap/control/toggle_command_mapping.hpp"
-//include subsystems and commands below
+//include subsystems below
 
+//include commands below
 
 /*
  * NOTE: We are using the DoNotUse_getDrivers() function here
@@ -22,6 +23,8 @@ src::driversFunc drivers = src::DoNotUse_getDrivers;
 
 using namespace tap;
 using namespace tap::control;
+
+//include subsystem namespaces below
 
 namespace SentryControl {
 
